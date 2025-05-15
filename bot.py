@@ -40,11 +40,12 @@ def delete_bad_word(word_to_remove):
         d.seek(0)
         d.truncate(0)
         d.writelines(line for line in lines if line.strip() != word_to_remove)
-with open('bad_words.txt', 'r', encoding='utf-8') as f:
-    banned_words = f.read().splitlines()
-
-with open('messages.txt', 'r', encoding='utf-8') as a:
-    ready_messages = a.read().splitlines()
+def banned_words():
+    with open('bad_words.txt', 'r', encoding='utf-8') as f:
+         return f.read().splitlines()
+def ready_messages():
+    with open('messages.txt', 'r', encoding='utf-8') as a:
+        return a.read().splitlines()
 
 
 def add_message(message,response):
@@ -110,23 +111,23 @@ async def handler(event):
         message_text = event.message.message.lower()
         if event.message.text.lower().startswith('/>:) '):
             new_word = event.message.text[len('/>:) '):].strip().lower()
-            if new_word not in banned_words:
+            if new_word not in banned_words():
                 add_bad_word(new_word)
                 await event.reply(f'Taqiqlangan soz  "{new_word}" muafiqiyatli qoshildi')
-            elif new_word in banned_words:
+            elif new_word in banned_words():
                 await event.reply(f'Tanlangan soz "{new_word}" allaqachon yozilgan')
             else:
                 await event.reply('qoshishga berilgan soz yo\'q')
         if event.message.text.lower().startswith('/>:( '):
             new_word = event.message.text[len('/>:( '):].strip().lower()
-            if new_word in banned_words:
+            if new_word in banned_words():
                 delete_bad_word(new_word)
                 await event.reply(f'Taqiqlangan soz  "{new_word}" muafiqiyatli ochrirldi')
-            elif new_word not in banned_words:
+            elif new_word not in banned_words():
                 await event.reply(f'Tanlangan soz "{new_word}" ozi yoq')
             else:
                 await event.respond('qoshishga berilgan soz yo\'q')
-        if any(banned_word in message_text for banned_word in banned_words):
+        if any(banned_word in message_text for banned_word in banned_words()):
             respectful_replies = [
                 "🤖 Men yordam berishga tayyorman, lekin iltimos, 😊 hurmat bilan muloqot qilaylik.",
                 "🙏 Hurmatli do‘stim, iltimos, xushmuomalalikni unutmang. Har doim sizga yordam berishga tayyorman!",
@@ -154,14 +155,14 @@ async def handler(event):
             new_word = event.message.text[len('/>:)_message '):].strip().lower()
             reply_message = new_word.split('=')
             b = []
-            for i in ready_messages:
+            for i in ready_messages():
                 b.append(i.split('='))
             if reply_message not in b:
                     add_message(reply_message[0],reply_message[1])
                     await event.reply(f'"{new_word}" muafiqiyatli qoshildi')
             elif reply_message in b:
                     await event.reply(f'"{new_word}" allaqachon qoshilgan va ozgartirishga ruxsat yoq')
-        for ready_message in ready_messages:
+        for ready_message in ready_messages():
             parts = ready_message.split('=', 1)
             if len(parts) != 2:
                 continue  # skip invalid lines
