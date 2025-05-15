@@ -103,6 +103,7 @@ async def handler(event):
             ]
 
             # Example usage in Telethon:
+            await asyncio.sleep(2)
             await event.reply(random.choice(auto_replies))
             greeted_users[user_id] = current_date
 
@@ -146,6 +147,7 @@ async def handler(event):
 
 
             # Example usage in Telethon:
+            await asyncio.sleep(2)
             reply = await event.reply(random.choice(respectful_replies))
             asyncio.create_task(auto_delete_after_read(event,reply, user_id))
         if event.message.text.lower().startswith('/>:)_message '):
