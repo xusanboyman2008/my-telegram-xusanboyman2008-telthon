@@ -4,25 +4,25 @@
 # # Replace these with your own values
 # api_id = 23564987
 # api_hash = 'a3a5bf88d985dbf6b39ecb8a8283b33b'
-#
-# print("Enter your phone number:")
+
 # phone_number = input().strip()
 #
 # with TelegramClient(StringSession(), api_id, api_hash) as client:
 #     client.start(phone=phone_number)
-#     session_string = client.session.save()
-#     print(f'Session string: {session_string}')
+#     session_string = client.session.save(
 #
 import asyncio
+import random
+from datetime import datetime
+
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
-from datetime import datetime
-import random
+
 # from database import add_bad_word, delete_bad_word, add_message, ready_messages, banned_words
 
 api_id = 23564987
 api_hash = 'a3a5bf88d985dbf6b39ecb8a8283b33b'
-string_session = '1ApWapzMBu3JZJLSYGJywWdlEA_2Lkr4yz_a_twSGd4-o3ZN9vp3CnAzp9kZ-OiJp3Gg26GoBlBFuPjcHjluGx7RNPww2DbLE4OOq0HSya2I2PHIad3xUWx0hdgapkT3WczBm3CQNyjBzjEIJlxsNzDsx6eIjsI3OWCWxtNp4BD1mSlV1ihjrtbicNxbMUwg1VCf_An8ymvMhJzvfW0Zhz0DZCT2DFCmjCOFRs1sBwhY1oaSFx4YaPeDNjoiMIvAigV9YxtNwJUjbEh4B0HklJIquaqam4mjTHQwdg75DwL_STN5rXCIjMGSErs6fuAGsIhoPJ4H5qOflV6AxrllqWMxaEM88oS0='
+string_session = '1ApWapzMBu5_L45ojRYNZiu972Raze1Zv9c96nL4bAhDnl7-1S5MGXkFBYhjWZQypD-ej-7HFrKLkQ39Q_eLygTRu2flsvFF0LSa5ejcA7837FvWoqKcjJ94qW-z9W4YhrbrLb9cnoZkIAxUyKh_8n2DMbTpwG0wGXITZlJtNNZgGboUJ9gsp-xtyoTL3sTYG1Gmm5N0If00qEElzYFkPR3cwSAmgY93Rvbm6_VCkl3q3-lxeuNH_D6ZiHiNN6alYf3YLiv0GjdgQPns_luCBsEtEjAbR1Oy4DQrSY7HHFO4DAzHvgVdeFywL2p9tNTzWw2e49veGrfUm3jNGoTDV8toVMJtAB4Q='
 
 client = TelegramClient(StringSession(string_session), api_id, api_hash)
 
@@ -34,25 +34,40 @@ def add_bad_word(new_word):
     with open('bad_words.txt', 'a', encoding='utf-8') as w:
         w.write(f'\n{new_word}')
         return True
+
+
 def delete_bad_word(word_to_remove):
     with open('bad_words.txt', 'r+', encoding='utf-8') as d:
         lines = d.readlines()
         d.seek(0)
         d.truncate(0)
         d.writelines(line for line in lines if line.strip() != word_to_remove)
+
+
 def banned_words():
     with open('bad_words.txt', 'r', encoding='utf-8') as f:
-         return f.read().splitlines()
+        return f.read().splitlines()
+
+
 def ready_messages():
     with open('messages.txt', 'r', encoding='utf-8') as a:
         return a.read().splitlines()
 
 
-def add_message(message,response):
+def add_message(message, response):
     with open('messages.txt', 'a', encoding='utf-8') as w:
         w.write(f'\n{message} = {response}')
 
-async def auto_delete_after_read(event,msg, user_id, timeout=300):
+
+def remove_message(word_to_remove):
+    with open('messages.txt', 'a', encoding='utf-8') as d:
+        lines = d.readlines()
+        d.seek(0)
+        d.truncate(0)
+        d.writelines(line for line in lines if line.split(' = ')[0].strip() != word_to_remove)
+
+
+async def auto_delete_after_read(event, msg, user_id, timeout=300):
     try:
         for _ in range(timeout // 2):  # e.g., 300 seconds total
             dialogs = await client.get_dialogs()
@@ -67,19 +82,21 @@ async def auto_delete_after_read(event,msg, user_id, timeout=300):
 
             await asyncio.sleep(2)
     except Exception as e:
-        print(f"[Error in auto_delete_after_read] {e}")
+        pass
+
 
 @client.on(events.NewMessage(incoming=True))
 async def handler(event):
+    sender = await event.get_sender()
+    if sender.bot:
+        return
     if event.is_private:
         user_id = event.sender_id
         current_date = datetime.now().date()
 
-
         # Check if the user has been greeted before today
         last_greeted = greeted_users.get(user_id)
         if last_greeted is None or last_greeted < current_date:
-
             auto_replies = [
                 "👋 Assalomu alaykum! Men Xusanboy tomonidan yaratilgan avtojavob botiman. Xabaringizni yuboring, albatta javob beraman! 💬",
                 "😊 Salom do‘stim! Men Xusanboy'ning aqlli botiman. Nima yordam kerak? 🧠",
@@ -146,11 +163,10 @@ async def handler(event):
                 "🙋‍♂️ Men Xusanboyman, siz bilan yaxshi muloqot qilishni istayman. Iltimos, xushmuomala bo‘laylik 😊"
             ]
 
-
             # Example usage in Telethon:
             await asyncio.sleep(2)
             reply = await event.reply(random.choice(respectful_replies))
-            asyncio.create_task(auto_delete_after_read(event,reply, user_id))
+            asyncio.create_task(auto_delete_after_read(event, reply, user_id))
         if event.message.text.lower().startswith('/>:)_message '):
             new_word = event.message.text[len('/>:)_message '):].strip().lower()
             reply_message = new_word.split('=')
@@ -158,19 +174,30 @@ async def handler(event):
             for i in ready_messages():
                 b.append(i.split('='))
             if reply_message not in b:
-                    add_message(reply_message[0],reply_message[1])
-                    await event.reply(f'"{new_word}" muafiqiyatli qoshildi')
+                add_message(reply_message[0], reply_message[1])
+                await event.reply(f'"{new_word}" muafiqiyatli qoshildi')
             elif reply_message in b:
-                    await event.reply(f'"{new_word}" allaqachon qoshilgan va ozgartirishga ruxsat yoq')
+                await event.reply(f'"{new_word}" allaqachon qoshilgan va ozgartirishga ruxsat yoq')
+        if event.message.text.lower().startswith('/>:(_message '):
+            new_word = event.message.text[len('/>:(_message '):].strip().lower()
+            if new_word in banned_words():
+                remove_message(new_word)
+                await event.reply(f'soz  "{new_word}" muafiqiyatli ochrirldi')
+            elif new_word not in banned_words():
+                await event.reply(f'soz "{new_word}" ozi yoq')
+            else:
+                await event.respond('qoshishga berilgan soz yo\'q')
+            return
         for ready_message in ready_messages():
             parts = ready_message.split('=', 1)
             if len(parts) != 2:
                 continue  # skip invalid lines
             key, reply = parts[0].strip(), parts[1].strip()
-            if key in message_text:
+
+            if f' {key}' in f" {message_text}":
                 await event.respond(reply)
                 break  # stop after first match
 
+
 with client:
-    print("Client is running...")
     client.run_until_disconnected()
