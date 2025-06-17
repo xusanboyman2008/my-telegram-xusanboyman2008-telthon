@@ -4,14 +4,16 @@
 # # Replace these with your own values
 # api_id = 23564987
 # api_hash = 'a3a5bf88d985dbf6b39ecb8a8283b33b'
-
+#
 # phone_number = input().strip()
 #
 # with TelegramClient(StringSession(), api_id, api_hash) as client:
 #     client.start(phone=phone_number)
-#     session_string = client.session.save(
+#     session_string = client.session.save()
+#     print(session_string)
 #
 import asyncio
+import os
 import random
 from datetime import datetime
 
@@ -22,7 +24,8 @@ from telethon.sessions import StringSession
 
 api_id = 23564987
 api_hash = 'a3a5bf88d985dbf6b39ecb8a8283b33b'
-string_session = '1ApWapzMBu5_L45ojRYNZiu972Raze1Zv9c96nL4bAhDnl7-1S5MGXkFBYhjWZQypD-ej-7HFrKLkQ39Q_eLygTRu2flsvFF0LSa5ejcA7837FvWoqKcjJ94qW-z9W4YhrbrLb9cnoZkIAxUyKh_8n2DMbTpwG0wGXITZlJtNNZgGboUJ9gsp-xtyoTL3sTYG1Gmm5N0If00qEElzYFkPR3cwSAmgY93Rvbm6_VCkl3q3-lxeuNH_D6ZiHiNN6alYf3YLiv0GjdgQPns_luCBsEtEjAbR1Oy4DQrSY7HHFO4DAzHvgVdeFywL2p9tNTzWw2e49veGrfUm3jNGoTDV8toVMJtAB4Q='
+string_session = os.getenv('TOKEN')
+# string_session = '1ApWapzMBu5_L45ojRYNZiu972Raze1Zv9c96nL4bAhDnl7-1S5MGXkFBYhjWZQypD-ej-7HFrKLkQ39Q_eLygTRu2flsvFF0LSa5ejcA7837FvWoqKcjJ94qW-z9W4YhrbrLb9cnoZkIAxUyKh_8n2DMbTpwG0wGXITZlJtNNZgGboUJ9gsp-xtyoTL3sTYG1Gmm5N0If00qEElzYFkPR3cwSAmgY93Rvbm6_VCkl3q3-lxeuNH_D6ZiHiNN6alYf3YLiv0GjdgQPns_luCBsEtEjAbR1Oy4DQrSY7HHFO4DAzHvgVdeFywL2p9tNTzWw2e49veGrfUm3jNGoTDV8toVMJtAB4Q='
 
 client = TelegramClient(StringSession(string_session), api_id, api_hash)
 
@@ -197,6 +200,7 @@ async def handler(event):
             if f' {key}' in f" {message_text}":
                 await event.respond(reply)
                 break  # stop after first match
+
 
 
 with client:
