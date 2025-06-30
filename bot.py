@@ -99,6 +99,15 @@ async def handle_new_message(event):
             target = text[:2]
             await event.delete()
             translation = await translate(text[2:], target)
+            if event.is_reply:
+                original = await event.get_reply_message()
+                if original:
+                    await event.reply(
+                        text=translation,
+                        reply_to=original.id,
+                    )
+                    return
+
             await event.respond(translation)
             return
         if '/voice' in event.text[:10]:
