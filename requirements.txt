@@ -3,3 +3,4 @@ sqlalchemy
 aiohttp
 asyncio
 edge_tts
+langdetect
