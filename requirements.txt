@@ -1,2 +1,5 @@
 telethon
 sqlalchemy
+aiohttp
+asyncio
+edge_tts

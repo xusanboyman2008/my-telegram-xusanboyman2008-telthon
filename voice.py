@@ -2,7 +2,6 @@ import asyncio
 import os
 
 import edge_tts
-import playsound
 
 
 def voices(voice='en-US-GuyNeural'):
