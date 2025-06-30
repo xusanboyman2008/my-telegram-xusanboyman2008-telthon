@@ -97,8 +97,8 @@ async def handle_new_message(event):
         if '/tr' == event.text[:3]:
             text = event.text[3:]
             target = text[:2]
-            translation = await translate(text[2:], target)
             await event.delete()
+            translation = await translate(text[2:], target)
             await event.respond(translation)
             return
         if '/voice' in event.text[:10]:
