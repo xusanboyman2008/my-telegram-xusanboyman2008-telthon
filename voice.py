@@ -2,24 +2,10 @@ import asyncio
 import os
 
 import edge_tts
-from langdetect import detect
-
-from translator import translate
-
-voices_list = [
-    "en-US-BrianMultilingualNeural",  # English (US) - Male
-    "uz-UZ-SardorNeural",  # Uzbek - Male
-    "uz-UZ-MadinaNeural",  # Uzbek - Female
-    "en-IN-PrabhatNeural",  # English (India) - Male
-    "en-IN-NeerjaNeural",  # English (India) - Female
-    "ru-RU-DmitryNeural",  # Russian - Male
-    "ru-RU-SvetlanaNeural"  # Russian - Female
-]
-
 
 def voices(voice='en-US-GuyNeural'):
     voices_list = [
-        "en-US-BrianMultilingualNeural",  # English (US) - Male
+        "n-US-GuyNeural",  # English (US) - Male
         "uz-UZ-SardorNeural",  # Uzbek - Male
         "uz-UZ-MadinaNeural",  # Uzbek - Female
         "en-IN-PrabhatNeural",  # English (India) - Male
