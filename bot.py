@@ -28,7 +28,6 @@ from voice import tts
 api_id = 23564987
 api_hash = 'a3a5bf88d985dbf6b39ecb8a8283b33b'
 string_session = os.getenv('TOKEN')
-# string_session = '1ApWapzMBu1ZOtkPhhMz-yhOMhyOBuqasPrIa7CD1fmwYNRNKUDrISbhX3LyKp9MLHEubcLWtEUT_TSKPrYX7SfohSctemVx0gTZJNdi1T66D00m_Gi7W09hSfN84r3POKBfrM95m5ng8Hj9auRBFbZh1jBXjJtR37nQHpbfjMizDwwTNzices6d6OTCA8pb87TTn8LmNSYdOYqzYX3wvvJu5eF1ED3_uzg-iH-nxpUcmOOtoTAvgslVwqT8QAOYRdzvgsA4NmURmarTTXi9K2rEAUq-DAD6Fwi5hOUNIVi2mwMCyrCzj-1N0bST04ZgessUfGxyYgA8ZKSkMD9c9_bNryafiDB0='
 
 client = TelegramClient(StringSession(string_session), api_id, api_hash)
 
