@@ -5,7 +5,7 @@ import edge_tts
 
 def voices(voice='en-US-GuyNeural'):
     voices_list = [
-        "n-US-GuyNeural",  # English (US) - Male
+        "en-US-GuyNeural",  # English (US) - Male
         "uz-UZ-SardorNeural",  # Uzbek - Male
         "uz-UZ-MadinaNeural",  # Uzbek - Female
         "en-IN-PrabhatNeural",  # English (India) - Male
