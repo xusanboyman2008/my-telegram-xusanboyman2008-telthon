@@ -37,10 +37,6 @@ def voices(voice='en-US-GuyNeural'):
 
 async def tts(text, voice='en-US-GuyNeural'):
     voice_r = voices(voice)
-    lan = voice_r[:2]
-    detected_lang = detect(text)
-    if not lan == detected_lang:
-        text = await translate(text,lan)
     communicate = edge_tts.Communicate(
         text,
         voice_r)  # uz-UZ-SardorNeural|uz-UZ-MadinaNeural | en-US-JennyNeural | en-US-GuyNeural
