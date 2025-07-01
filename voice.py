@@ -2,24 +2,48 @@ import asyncio
 import os
 
 import edge_tts
+from langdetect import detect
+
+from translator import translate
+
+voices_list = [
+    "en-US-BrianMultilingualNeural",  # English (US) - Male
+    "uz-UZ-SardorNeural",  # Uzbek - Male
+    "uz-UZ-MadinaNeural",  # Uzbek - Female
+    "en-IN-PrabhatNeural",  # English (India) - Male
+    "en-IN-NeerjaNeural",  # English (India) - Female
+    "ru-RU-DmitryNeural",  # Russian - Male
+    "ru-RU-SvetlanaNeural"  # Russian - Female
+]
 
 
 def voices(voice='en-US-GuyNeural'):
     voices_list = [
-        'en-US-GuyNeural',
-        'uz-UZ-SardorNeural',
-        'uz-UZ-MadinaNeural',
-        'en-US-JennyNeural',
-        'en-IN-NeerjaExpressiveNeural'
+        "en-US-BrianMultilingualNeural",  # English (US) - Male
+        "uz-UZ-SardorNeural",  # Uzbek - Male
+        "uz-UZ-MadinaNeural",  # Uzbek - Female
+        "en-IN-PrabhatNeural",  # English (India) - Male
+        "en-IN-NeerjaNeural",  # English (India) - Female
+        "ru-RU-DmitryNeural",  # Russian - Male
+        "ru-RU-SvetlanaNeural"  # Russian - Female
     ]
     if voice.isdigit():
         return voices_list[int(voice) - 1]
     return voice
 
-async def tts(text,voice='en-US-GuyNeural'):
+
+
+
+
+async def tts(text, voice='en-US-GuyNeural'):
+    voice_r = voices(voice)
+    lan = voice_r[:2]
+    detected_lang = detect(text)
+    if not lan == detected_lang:
+        text = await translate(text,lan)
     communicate = edge_tts.Communicate(
         text,
-        voices(voice)) # uz-UZ-SardorNeural|uz-UZ-MadinaNeural | en-US-JennyNeural | en-US-GuyNeural
+        voice_r)  # uz-UZ-SardorNeural|uz-UZ-MadinaNeural | en-US-JennyNeural | en-US-GuyNeural
     # indian => en-IN-NeerjaExpressiveNeural
     try:
         os.remove('voice.ogg')
@@ -42,7 +66,7 @@ async def tts(text,voice='en-US-GuyNeural'):
 
 if __name__ == '__main__':
     try:
-        asyncio.run(tts('are you crazy  ?'))
+        asyncio.run(tts('hi this is xusanboy! do you like this? if you do like! subscribe to my channel ','6'))
     except KeyboardInterrupt:
         print("exit")
     except PermissionError:
