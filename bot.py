@@ -174,15 +174,18 @@ async def handle_new_message(event):
             return
         if event.message.text.lower().startswith('/>:(_message '):
             new_word = event.message.text[len('/>:(_message '):].strip().lower()
-            if new_word in banned_words():
-                remove_message(new_word)
-                await event.reply(f'soz  "{new_word}" muafiqiyatli ochrirldi')
-            elif new_word not in banned_words():
-                await event.reply(f'soz "{new_word}" ozi yoq')
-            else:
-                await event.respond('qoshishga berilgan soz yo\'q')
-            return
-
+            reply_message = new_word.split('=')
+            b = []
+            for i in ready_messages():
+                b.append(i.split('='))
+                if reply_message not in b:
+                    remove_message(new_word)
+                    await event.reply(f'soz  "{new_word}" muafiqiyatli ochrirldi')
+                elif new_word not in banned_words():
+                    await event.reply(f'soz "{new_word}" ozi yoq')
+                else:
+                    await event.respond('qoshishga berilgan soz yo\'q')
+                return
 
 @client.on(events.NewMessage(incoming=True))
 async def handler(event):

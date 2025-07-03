@@ -28,5 +28,5 @@ async def translate(text, target_lang="uz"):
 
 # Test
 if __name__ == "__main__":
-        translated = asyncio.run(translate("hi gitler", "gr"))
+        translated = asyncio.run(translate("/truz guy's you are luck each season you go somewhere with your all co-workers i think it should be amazing. how can give you a such vacation to you", "uz"))
         print("Translated:", translated)
